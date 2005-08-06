@@ -20,7 +20,97 @@
 \author{Alexey Dobriyan $<$adobriyan@gmail.com$>$}
 \maketitle
 
+\section{Differential equations}
 
+Continuity equation:
+\begin{equation}
+\frac{\partial (\phi \rho)}{\partial t} + \nabla (\rho \vec{v}) = q
+\end{equation}
+where $\phi = \phi(\vec{r}, p)$ --- porosity of the medium, $\rho = \rho(p)$
+--- density of the fluid, $t$~--- time, $\vec{v} = \vec{v}(\vec{r}, t)$ ---
+flow velocity, $q = q(\vec{r}, t)$ --- fluid injection rate.
 
+Darcy's law:
+\begin{equation}
+\vec{v} = -\frac{K}{\mu} (\nabla p - \rho g \nabla D)
+\end{equation}
+$K = K(\vec{r}, p)$ --- permeability, $\mu = \mu(p)$ --- viscosity, $p =
+p(\vec{r}, t)$ --- pressure in the fluid, $g$ --- acceleration due to gravity,
+$D = D(\vec{r})$ --- depth function.
+\begin{equation}
+\frac{\partial (\phi \rho)}{\partial t} = \nabla \left(\frac{\rho K}{\mu}
+(\nabla p - \rho g \nabla D) \right) + q
+\end{equation}
+
+\section{Assumptions}
+\begin{enumerate}
+\item $D$ = const
+\begin{equation}
+\frac{\partial (\phi \rho)}{\partial t} = \nabla \left(\frac{\rho K}{\mu}
+\nabla p \right) + q
+\end{equation}
+\item $\phi$ = const
+\begin{equation}
+\phi \frac{\partial \rho}{\partial t} = \nabla \left(\frac{\rho K}{\mu}
+\nabla p \right) + q
+\end{equation}
+\item $K$ = const
+\begin{equation}
+\phi \frac{\partial \rho}{\partial t} = K \nabla \left(\frac{\rho}{\mu} \nabla
+p \right) + q
+\end{equation}
+\item $\mu$ = const
+\begin{equation}
+\phi \frac{\partial \rho}{\partial t} = \frac{K}{\mu} \nabla (\rho \nabla p) +
+q
+\end{equation}
+
+\begin{equation}
+\frac{\partial \rho}{\partial t} = \rho' \frac{\partial p}{\partial t}
+\end{equation}
+\begin{equation}
+\nabla (\rho \nabla p) = \nabla \rho \nabla p + \rho \Delta p = \rho' (\nabla
+p)^2 + \rho \Delta p
+\end{equation}
+\begin{equation}
+\phi \rho' \frac{\partial p}{\partial t} = \frac{K}{\mu} \left(\rho' (\nabla
+p)^2 + \rho \Delta p \right) + q
+\end{equation}
+\begin{equation}
+\phi \frac{\rho'}{\rho} \frac{\partial p}{\partial t} = \frac{K}{\mu}
+\left(\frac{\rho'}{\rho} (\nabla p)^2 + \Delta p \right) + \frac{q}{\rho}
+\end{equation}
+\item $\frac{\rho'}{\rho}$ = $c$ = const
+\begin{equation}
+\phi c \frac{\partial p}{\partial t} = \frac{K}{\mu} \left(c (\nabla p)^2 +
+\Delta p \right) + \frac{q}{\rho}
+\end{equation}
+\item $c (\nabla p)^2 \ll \Delta p$ --- fluid of slight compressibility
+\begin{equation}
+\phi c \frac{\partial p}{\partial t} = \frac{K}{\mu} \Delta p + \frac{q}{\rho}
+\end{equation}
+\item $q$ = 0
+\begin{equation}
+\frac{\partial p}{\partial t} = \frac{K}{\phi \mu c} \Delta p
+\end{equation}
+\item 1-dimensional space
+\begin{equation}
+\frac{\partial p}{\partial t} = \frac{K}{\phi \mu c} \frac{\partial^2
+p}{\partial x^2}
+\end{equation}
+where $p = p(x, t)$.
+\end{enumerate}
+
+\section{Initial and boundary conditions}
+\begin{equation}
+p(x, 0) = p_{x 0}(x), 0 \leq x \leq 1
+\end{equation}
+\begin{equation}
+p(0, t) = p_{0 t}(t), t \geq 0
+\end{equation}
+\begin{equation}
+p(1, t) = p_{1 t}(t), t \geq 0
+\end{equation}
+\section{COPYING}
 \input{gpl_notice.tex}
 \end{document}
