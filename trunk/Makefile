@@ -16,6 +16,7 @@
 
 PROGRAM = 1phase
 OBJECTS = 1phase.o
+TEX = 1phase.tex
 
 CFLAGS = -Wall
 
@@ -23,5 +24,9 @@ all: $(PROGRAM)
 
 1phase: $(OBJECTS)
 
+dvi: $(TEX)
+	for file in $(TEX); do latex $$file; done
+
 clean:
-	rm -f $(PROGRAM) $(OBJECTS)
+	rm -f $(PROGRAM) $(OBJECTS) $(subst .tex,.dvi,$(TEX)) \
+	$(subst .tex,.aux,$(TEX)) $(subst .tex,.log,$(TEX))
