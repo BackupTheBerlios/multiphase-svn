@@ -3,10 +3,40 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <TITLE>Multiphase flow simulator</TITLE>
+<STYLE type="text/css">
+	H1 { text-align: center }
+</STYLE>
 </HEAD>
 <BODY>
 
+<H1>Multiphase flow simulator</H1>
 
+<H2>Source code</H2>
+Anonymous <A href="http://subversion.tigris.org/">Subversion</A> access:
+<PRE>
+	svn checkout svn://svn.berlios.de/multiphase/trunk multiphase
+</PRE>
+Structure:
+<PRE>
+	html/Makefile		make upload
+					upload HTML to berlios.de
+
+	html/index.html		This page. ;-)
+	1phase.c		1-phase flow simulator source code
+	1phase.tex		1-phase flow simulator documentation
+	COPYING			GNU General Public License version 2
+
+	Makefile		make
+				make all
+					build executables
+				make dvi
+					generate documentation in DVI format
+				make clean
+					cleanup mess
+
+	gpl_notice.tex		GNU GPL notice to include in TeX documentation
+					\input{gpl_notice.tex}
+</PRE>
 
 <A href="http://developer.berlios.de" title="BerliOS Developer"><IMG src="http://developer.berlios.de/bslogo.php?group_id=4416" width="124px" height="32px" border="0" alt="BerliOS Developer Logo"></A>
 </BODY>
