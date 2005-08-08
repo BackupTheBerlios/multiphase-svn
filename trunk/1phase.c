@@ -16,14 +16,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "misc.h"
+#include "parser.h"
 
 #define N 10
 /* uniform grid */
-#define DX 20.0
+static long double DX;
 /* uniform timesteps */
-#define DT 0.05
+static long double DT;
 
 #define print_array(a) __print_array(#a, a)
 
@@ -32,17 +34,17 @@ static void __print_array(char *s, long double *p)
 	int i;
 
 	for (i = 0; i < N; i++)
-		printf("%s[%u] = %s(%f) = %Lf\n", s, i, s, i * DX, p[i]);
+		printf("%s[%u] = %s(%Lf) = %Lf\n", s, i, s, i * DX, p[i]);
 }
 
 /* permeability */
-#define K 50.0
+static long double K;
 /* porosity */
-#define phi 0.15
+static long double phi;
 /* viscosity */
-#define mu 0.7
+static long double mu;
 /* compressibility */
-#define c 1.4
+static long double c;
 
 /* Initial conditions */
 static long double p_x0(int i)
@@ -90,6 +92,40 @@ int main(void)
 	/* current pressure p(x, t) */
 	long double p[N];
 	int i;
+
+	struct token *head, *cur;
+
+	head = tokenize();
+	cur = head;
+	while (cur) {
+		if (strcmp("DX", cur->string) == 0) {
+			DX = strtold(cur->next->string, NULL);
+			if (DX <= 0.0)
+				die("DX = %Lf <= 0.0", DX);
+		} else if (strcmp("DT", cur->string) == 0) {
+			DT = strtold(cur->next->string, NULL);
+			if (DT <= 0.0)
+				die("DT = %Lf <= 0.0", DT);
+		} else if (strcmp("K", cur->string) == 0) {
+			K = strtold(cur->next->string, NULL);
+			if (K <= 0.0)
+				die("K = %Lf <= 0.0", K);
+		} else if (strcmp("phi", cur->string) == 0) {
+			phi = strtold(cur->next->string, NULL);
+			if (phi <= 0.0 || phi > 1.0)
+				die("phi = %Lf not in (0.0, 1.0]", phi);
+		} else if (strcmp("mu", cur->string) == 0) {
+			mu = strtold(cur->next->string, NULL);
+			if (mu <= 0.0)
+				die("mu = %Lf <= 0.0", mu);
+		} else if (strcmp("c", cur->string) == 0) {
+			c = strtold(cur->next->string, NULL);
+			if (c <= 0.0)
+				die("c = %Lf <= 0.0", c);
+		}
+		cur = cur->next;
+	}
+	free_tokens(head);
 
 	for (i = 0; i < N; i++)
 		p[i] = p_x0(i);

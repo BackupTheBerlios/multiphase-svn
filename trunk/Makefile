@@ -18,13 +18,13 @@ PROGRAM = 1phase
 OBJECTS = 1phase.o misc.o parser.o
 TEX = 1phase.tex
 
-CFLAGS = -Wall
+CFLAGS = -Wall -std=c99
 
 all: $(PROGRAM)
 
 1phase: $(OBJECTS)
 
-1phase.o: misc.h
+1phase.o: misc.h parser.h
 
 misc.o: misc.h
 
