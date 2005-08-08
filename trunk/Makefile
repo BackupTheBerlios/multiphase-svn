@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 PROGRAM = 1phase
-OBJECTS = 1phase.o
+OBJECTS = 1phase.o misc.o
 TEX = 1phase.tex
 
 CFLAGS = -Wall
@@ -23,6 +23,10 @@ CFLAGS = -Wall
 all: $(PROGRAM)
 
 1phase: $(OBJECTS)
+
+1phase.o: misc.h
+
+misc.o: misc.h
 
 dvi: $(TEX)
 	for file in $(TEX); do latex $$file; done

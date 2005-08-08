@@ -14,24 +14,10 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 
-#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#define die(fmt, args...) __die("%s: " fmt, __func__, args)
-
-static void __die(char *fmt, ...)
-{
-	va_list args;
-	static char excuse[512];
-
-	va_start(args, fmt);
-	vsnprintf(excuse, sizeof(excuse), fmt, args);
-	va_end(args);
-
-	fprintf(stderr, "%s\n", excuse);
-	exit(EXIT_FAILURE);
-}
+#include "misc.h"
 
 #define N 10
 /* uniform grid */
