@@ -50,7 +50,7 @@ static long double c = -1.0;
 static long double p_x0(int i)
 {
 	if (i < 0 || i > N - 1)
-		die("%d not in [%d, %d]", i, 0, N - 1);
+		die("%s: %d not in [%d, %d]", __func__, i, 0, N - 1);
 	if (i == 0)
 		return 105.0;
 	if (i == N - 1)
@@ -62,7 +62,7 @@ static long double p_x0(int i)
 static long double p_lt(int t)
 {
 	if (t < 0)
-		die("%d not in [0, \\infty)", t);
+		die("%s: %d not in [0, \\infty)", __func__, t);
 	if (t < 10)
 		return 105.0;
 	return 90.0;
@@ -72,7 +72,7 @@ static long double p_lt(int t)
 static long double p_rt(int t)
 {
 	if (t < 0)
-		die("%d not in [0, \\infty)", t);
+		die("%s: %d not in [0, \\infty)", __func__, t);
 	if (t < 10)
 		return 90.0;
 	return 105.0;
@@ -81,7 +81,7 @@ static long double p_rt(int t)
 static long double d2f_dx2(int i, long double *f)
 {
 	if (i < 1 || i > N - 2)
-		die("%d not in [%u, %u]", i, 1, N - 2);
+		die("%s: %d not in [%u, %u]", __func__, i, 1, N - 2);
 	return (f[i - 1] - 2 * f[i] + f[i + 1]) / (DX * DX);
 }
 
@@ -101,44 +101,44 @@ int main(void)
 		if (strcmp("DX", cur->string) == 0) {
 			DX = strtold(cur->next->string, NULL);
 			if (DX <= 0.0)
-				die("DX = %Lf <= 0.0", DX);
+				die("%s: DX = %Lf <= 0.0", __func__, DX);
 		} else if (strcmp("DT", cur->string) == 0) {
 			DT = strtold(cur->next->string, NULL);
 			if (DT <= 0.0)
-				die("DT = %Lf <= 0.0", DT);
+				die("%s: DT = %Lf <= 0.0", __func__, DT);
 		} else if (strcmp("K", cur->string) == 0) {
 			K = strtold(cur->next->string, NULL);
 			if (K <= 0.0)
-				die("K = %Lf <= 0.0", K);
+				die("%s: K = %Lf <= 0.0", __func__, K);
 		} else if (strcmp("phi", cur->string) == 0) {
 			phi = strtold(cur->next->string, NULL);
 			if (phi <= 0.0 || phi > 1.0)
-				die("phi = %Lf not in (0.0, 1.0]", phi);
+				die("%s: phi = %Lf not in (0.0, 1.0]", __func__, phi);
 		} else if (strcmp("mu", cur->string) == 0) {
 			mu = strtold(cur->next->string, NULL);
 			if (mu <= 0.0)
-				die("mu = %Lf <= 0.0", mu);
+				die("%s: mu = %Lf <= 0.0", __func__, mu);
 		} else if (strcmp("c", cur->string) == 0) {
 			c = strtold(cur->next->string, NULL);
 			if (c <= 0.0)
-				die("c = %Lf <= 0.0", c);
+				die("%s: c = %Lf <= 0.0", __func__, c);
 		}
 		cur = cur->next;
 	}
 	free_tokens(head);
 
 	if (DX == -1.0)
-		die("%s undefined", "DX");
+		die("%s: DX undefined", __func__);
 	if (DT == -1.0)
-		die("%s undefined", "DT");
+		die("%s: DT undefined", __func__);
 	if (K == -1.0)
-		die("%s undefined", "K");
+		die("%s: K undefined", __func__);
 	if (phi == -1.0)
-		die("%s undefined", "phi");
+		die("%s: phi undefined", __func__);
 	if (mu == -1.0)
-		die("%s undefined", "mu");
+		die("%s: mu undefined", __func__);
 	if (c == -1.0)
-		die("%s undefined", "c");
+		die("%s: c undefined", __func__);
 
 	for (i = 0; i < N; i++)
 		p[i] = p_x0(i);

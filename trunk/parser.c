@@ -37,7 +37,7 @@ static int get_string(int c, char **string)
 		c = getchar();
 	}
 	if (pos == sizeof(buf))
-		die("token \"%s\" too long", buf);
+		die("%s: token \"%s\" too long", __func__, buf);
 	buf[pos] = '\0';
 	*string = xmalloc(strlen(buf) + 1);
 	strcpy(*string, buf);

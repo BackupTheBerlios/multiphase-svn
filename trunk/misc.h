@@ -19,8 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 
 #include <stddef.h>
 
-void __die(char *fmt, ...);
-#define die(fmt, args...) __die("%s: " fmt, __func__, args)
+void die(char *fmt, ...);
 
 void * xmalloc(size_t size);
 
