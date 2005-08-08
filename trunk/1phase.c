@@ -23,9 +23,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 
 #define N 10
 /* uniform grid */
-static long double DX;
+static long double DX = -1.0;
 /* uniform timesteps */
-static long double DT;
+static long double DT = -1.0;
 
 #define print_array(a) __print_array(#a, a)
 
@@ -38,13 +38,13 @@ static void __print_array(char *s, long double *p)
 }
 
 /* permeability */
-static long double K;
+static long double K = -1.0;
 /* porosity */
-static long double phi;
+static long double phi = -1.0;
 /* viscosity */
-static long double mu;
+static long double mu = -1.0;
 /* compressibility */
-static long double c;
+static long double c = -1.0;
 
 /* Initial conditions */
 static long double p_x0(int i)
@@ -126,6 +126,19 @@ int main(void)
 		cur = cur->next;
 	}
 	free_tokens(head);
+
+	if (DX == -1.0)
+		die("%s undefined", "DX");
+	if (DT == -1.0)
+		die("%s undefined", "DT");
+	if (K == -1.0)
+		die("%s undefined", "K");
+	if (phi == -1.0)
+		die("%s undefined", "phi");
+	if (mu == -1.0)
+		die("%s undefined", "mu");
+	if (c == -1.0)
+		die("%s undefined", "c");
 
 	for (i = 0; i < N; i++)
 		p[i] = p_x0(i);
