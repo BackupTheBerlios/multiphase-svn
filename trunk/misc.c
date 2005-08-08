@@ -32,3 +32,13 @@ void __die(char *fmt, ...)
 	fprintf(stderr, "%s\n", excuse);
 	exit(EXIT_FAILURE);
 }
+
+void * xmalloc(size_t size)
+{
+	void *ret;
+
+	ret = malloc(size);
+	if (!ret)
+		die("not enough memory for %zu bytes", size);
+	return ret;
+}

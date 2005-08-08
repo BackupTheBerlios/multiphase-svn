@@ -1,4 +1,4 @@
-/* Miscellaneous routines.
+/* Input parser.
    Copyright (C) 2005 Alexey Dobriyan <adobriyan@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
@@ -14,14 +14,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 
-#ifndef __MISC_H__
-#define __MISC_H__
+#ifndef __PARSER_H__
+#define __PARSER_H__
 
-#include <stddef.h>
+struct token {
+	struct token *next;
+	char *string;
+};
 
-void __die(char *fmt, ...);
-#define die(fmt, args...) __die("%s: " fmt, __func__, args)
+struct token * tokenize(void);
+void free_tokens(struct token *token);
 
-void * xmalloc(size_t size);
-
-#endif /* ndef __MISC_H__ */
+#endif /* ndef __PARSER_H__ */
