@@ -23,9 +23,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 
 #define N 10
 /* uniform grid */
-static long double DX = -1.0;
+static long double DX;
 /* uniform timesteps */
-static long double DT = -1.0;
+static long double DT;
 
 #define print_array(a) __print_array(#a, a)
 
@@ -38,13 +38,13 @@ static void __print_array(char *s, long double *p)
 }
 
 /* permeability */
-static long double K = -1.0;
+static long double K;
 /* porosity */
-static long double phi = -1.0;
+static long double phi;
 /* viscosity */
-static long double mu = -1.0;
+static long double mu;
 /* compressibility */
-static long double c = -1.0;
+static long double c;
 
 static struct param params[] = {
 	{
@@ -121,19 +121,6 @@ int main(void)
 	head = tokenize();
 	get_values(head, params);
 	free_tokens(head);
-
-	if (DX == -1.0)
-		die("%s: DX undefined", __func__);
-	if (DT == -1.0)
-		die("%s: DT undefined", __func__);
-	if (K == -1.0)
-		die("%s: K undefined", __func__);
-	if (phi == -1.0)
-		die("%s: phi undefined", __func__);
-	if (mu == -1.0)
-		die("%s: mu undefined", __func__);
-	if (c == -1.0)
-		die("%s: c undefined", __func__);
 
 	if (DX <= 0.0)
 		die("%s: DX = %Lf <= 0.0", __func__, DX);

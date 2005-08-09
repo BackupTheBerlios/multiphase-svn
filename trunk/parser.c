@@ -79,11 +79,23 @@ void free_tokens(struct token *token)
 	}
 }
 
+static void mark_as_not_found(struct param *params)
+{
+	int i;
+
+	while (params[i].name) {
+		params[i].found = 0;
+		i++;
+	}
+}
+
 void get_values(struct token *token, struct param *params)
 {
-	while (token) {
-		int i;
+	int i;
 
+	mark_as_not_found(params);
+
+	while (token) {
 		i = 0;
 		while (params[i].name) {
 			if (strcmp(token->string, params[i].name) == 0) {
@@ -97,6 +109,7 @@ void get_values(struct token *token, struct param *params)
 				if (end == token->next->string || *end)
 					die("%s: expected number, got \"%s\"",
 						__func__, token->next->string);
+				params[i].found = 1;
 				token = token->next;
 				goto found;
 			}
@@ -105,5 +118,12 @@ void get_values(struct token *token, struct param *params)
 		die("%s: unknown token \"%s\"", __func__, token->string);
 found:
 		token = token->next;
+	}
+
+	i = 0;
+	while (params[i].name) {
+		if (!params[i].found)
+			die("%s: no value for %s", __func__, params[i].name);
+		i++;
 	}
 }

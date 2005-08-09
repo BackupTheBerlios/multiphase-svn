@@ -28,6 +28,7 @@ void free_tokens(struct token *token);
 struct param {
 	char *name;
 	long double *value;
+	int found;
 };
 
 void get_values(struct token *token, struct param *params);
