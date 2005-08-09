@@ -112,5 +112,27 @@ p(0, t) = p_{l t}(t), t \geq 0
 p(L, t) = p_{r t}(t), t \geq 0
 \end{equation}
 
+\section{Finite Difference Scheme}
+
+Let's use the simplest explicit finite difference scheme on uniform grid for
+now. $\Delta x$, $\Delta t$ are constants. Second deriative in space is
+evaluated from values of 3 neighbor points.
+\begin{equation}
+p_{i j} = p(i \Delta x, j \Delta t), 0 \leq i \leq N - 1, j \geq 0
+\end{equation}
+\begin{equation}
+p_{i 0} = p_{x 0}(i \Delta x), 0 \leq i \leq N - 1
+\end{equation}
+\begin{equation}
+p_{0 j} = p_{l t}(j \Delta t), j \geq 0
+\end{equation}
+\begin{equation}
+p_{N - 1, j} = p_{r t}(j \Delta t), j \geq 0
+\end{equation}
+\begin{equation}
+\frac{p_{i, j + 1} - p_{i j}}{\Delta t} = \frac{K}{\phi \mu c} \frac{p_{i - 1,
+j} - 2 p_{i j} + p_{i + 1, j}}{(\Delta x)^2}, 1 \leq i \leq N - 2, j \geq 1
+\end{equation}
+
 \input{gpl_notice.tex}
 \end{document}
