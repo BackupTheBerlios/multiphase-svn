@@ -25,4 +25,11 @@ struct token {
 struct token * tokenize(void);
 void free_tokens(struct token *token);
 
+struct param {
+	char *name;
+	long double *value;
+};
+
+void get_values(struct token *token, struct param *params);
+
 #endif /* ndef __PARSER_H__ */

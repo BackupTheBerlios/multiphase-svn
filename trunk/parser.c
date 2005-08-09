@@ -78,3 +78,27 @@ void free_tokens(struct token *token)
 		token = next;
 	}
 }
+
+void get_values(struct token *token, struct param *params)
+{
+	while (token) {
+		int i;
+
+		i = 0;
+		while (params[i].name) {
+			if (strcmp(token->string, params[i].name) == 0) {
+				if (!token->next)
+					die("%s: missing value for \"%s\"",
+						__func__, params[i].name);
+				*params[i].value = strtold(token->next->string,
+								NULL);
+				token = token->next;
+				goto found;
+			}
+			i++;
+		}
+		die("%s: unknown token \"%s\"", __func__, token->string);
+found:
+		token = token->next;
+	}
+}
