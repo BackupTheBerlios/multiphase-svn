@@ -102,27 +102,34 @@ int main(void)
 			DX = strtold(cur->next->string, NULL);
 			if (DX <= 0.0)
 				die("%s: DX = %Lf <= 0.0", __func__, DX);
+			cur = cur->next;
 		} else if (strcmp("DT", cur->string) == 0) {
 			DT = strtold(cur->next->string, NULL);
 			if (DT <= 0.0)
 				die("%s: DT = %Lf <= 0.0", __func__, DT);
+			cur = cur->next;
 		} else if (strcmp("K", cur->string) == 0) {
 			K = strtold(cur->next->string, NULL);
 			if (K <= 0.0)
 				die("%s: K = %Lf <= 0.0", __func__, K);
+			cur = cur->next;
 		} else if (strcmp("phi", cur->string) == 0) {
 			phi = strtold(cur->next->string, NULL);
 			if (phi <= 0.0 || phi > 1.0)
 				die("%s: phi = %Lf not in (0.0, 1.0]", __func__, phi);
+			cur = cur->next;
 		} else if (strcmp("mu", cur->string) == 0) {
 			mu = strtold(cur->next->string, NULL);
 			if (mu <= 0.0)
 				die("%s: mu = %Lf <= 0.0", __func__, mu);
+			cur = cur->next;
 		} else if (strcmp("c", cur->string) == 0) {
 			c = strtold(cur->next->string, NULL);
 			if (c <= 0.0)
 				die("%s: c = %Lf <= 0.0", __func__, c);
-		}
+			cur = cur->next;
+		} else
+			die("%s: unknown token \"%s\"", __func__, cur->string);
 		cur = cur->next;
 	}
 	free_tokens(head);
