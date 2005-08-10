@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 #include "misc.h"
 #include "parser.h"
 
-static int get_string(int c, char **string)
+static int get_token(int c, char **string)
 {
 	int pos;
 	char buf[32];
@@ -56,7 +56,7 @@ struct token * tokenize(void)
 			struct token *token;
 
 			token = xmalloc(sizeof(*token));
-			c = get_string(c, &token->string);
+			c = get_token(c, &token->string);
 			last_token->next = token;
 			last_token = last_token->next;
 		} else
