@@ -78,15 +78,13 @@ static struct param params[] = {
 };
 
 /* Initial conditions */
+static long double *p_x0_data;
+
 static long double p_x0(int i)
 {
 	if (i < 0 || i > N - 1)
 		die("%s: %d not in [%d, %d]", __func__, i, 0, N - 1);
-	if (i == 0)
-		return 105.0;
-	if (i == N - 1)
-		return 90.0;
-	return 100.0;
+	return p_x0_data[i];
 }
 
 /* Left boundary condition */
@@ -130,6 +128,14 @@ int main(void)
 	get_values(head, params);
 	free_tokens(head);
 
+	p_x0_data = find_array("p_x0", params);
+	if (!p_x0_data)
+		die("%s: can't find \"%s\" array", __func__, "p_x0");
+
+	for (i = 0; i < N; i++)
+		if (p_x0_data[i] < 0.0)
+			die("%s: p_x0[%u] = %Lf < 0.0",	__func__,
+				i, p_x0_data[i]);
 	if (DX <= 0.0)
 		die("%s: DX = %Lf <= 0.0", __func__, DX);
 	if (DT <= 0.0)

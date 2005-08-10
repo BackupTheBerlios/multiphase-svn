@@ -212,3 +212,16 @@ found:
 		i++;
 	}
 }
+
+long double * find_array(char *name, struct param *params)
+{
+	int i;
+
+	i = 0;
+	while (params[i].name && strcmp(params[i].name, name) != 0) {
+		if (params[i].type == ARRAY)
+			break;
+		i++;
+	}
+	return params[i].name ? params[i].value : NULL;
+}
