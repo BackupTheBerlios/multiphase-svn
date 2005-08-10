@@ -25,10 +25,15 @@ struct token {
 struct token * tokenize(void);
 void free_tokens(struct token *token);
 
+enum param_type {
+	NUMBER,
+};
+
 struct param {
 	char *name;
 	long double *value;
 	int found;
+	enum param_type type;
 };
 
 void get_values(struct token *token, struct param *params);

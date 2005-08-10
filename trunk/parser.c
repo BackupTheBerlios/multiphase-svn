@@ -112,8 +112,15 @@ void get_values(struct token *token, struct param *params)
 				if (!token->next)
 					die("%s: missing value for \"%s\"",
 						__func__, params[i].name);
-				*params[i].value =
-					to_number(token->next->string);
+				switch (params[i].type) {
+				case NUMBER:
+					*params[i].value =
+						to_number(token->next->string);
+					break;
+				default:
+					die("%s: unknown parameter type %d",
+						__func__, params[i].type);
+				}
 				params[i].found = 1;
 				token = token->next;
 				goto found;

@@ -49,21 +49,27 @@ static struct param params[] = {
 	{
 		.name = "DX",
 		.value = &DX,
+		.type = NUMBER,
 	}, {
 		.name = "DT",
 		.value = &DT,
+		.type = NUMBER,
 	}, {
 		.name = "K",
 		.value = &K,
+		.type = NUMBER,
 	}, {
 		.name = "phi",
 		.value = &phi,
+		.type = NUMBER,
 	}, {
 		.name = "mu",
 		.value = &mu,
+		.type = NUMBER,
 	}, {
 		.name = "c",
 		.value = &c,
+		.type = NUMBER,
 	}, {
 	},
 };
