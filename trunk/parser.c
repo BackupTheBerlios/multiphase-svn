@@ -88,6 +88,17 @@ static void mark_as_not_found(struct param *params)
 	}
 }
 
+static long double to_number(char *string)
+{
+	long double number;
+	char *end;
+
+	number = strtold(string, &end);
+	if (end == string || *end)
+		die("%s: expected number, got \"%s\"", __func__, string);
+	return number;
+}
+
 void get_values(struct token *token, struct param *params)
 {
 	int i;
@@ -98,16 +109,11 @@ void get_values(struct token *token, struct param *params)
 		i = 0;
 		while (params[i].name) {
 			if (strcmp(token->string, params[i].name) == 0) {
-				char *end;
-
 				if (!token->next)
 					die("%s: missing value for \"%s\"",
 						__func__, params[i].name);
-				*params[i].value = strtold(token->next->string,
-								&end);
-				if (end == token->next->string || *end)
-					die("%s: expected number, got \"%s\"",
-						__func__, token->next->string);
+				*params[i].value =
+					to_number(token->next->string);
 				params[i].found = 1;
 				token = token->next;
 				goto found;
