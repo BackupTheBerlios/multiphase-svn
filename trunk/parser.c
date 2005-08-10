@@ -88,15 +88,17 @@ static void mark_as_not_found(struct param *params)
 	}
 }
 
-static long double to_number(char *string)
+static int to_number(char *string, long double *ret)
 {
 	long double number;
 	char *end;
 
 	number = strtold(string, &end);
 	if (end == string || *end)
-		die("%s: expected number, got \"%s\"", __func__, string);
-	return number;
+		return -1;
+	if (ret)
+		*ret = number;
+	return 0;
 }
 
 void get_values(struct token *token, struct param *params)
@@ -114,8 +116,11 @@ void get_values(struct token *token, struct param *params)
 						__func__, params[i].name);
 				switch (params[i].type) {
 				case NUMBER:
-					*params[i].value =
-						to_number(token->next->string);
+					if (to_number(token->next->string,
+							params[i].value) < 0)
+						die("%s: expected number, "
+							"got \"%s\"", __func__,
+							token->next->string);
 					break;
 				default:
 					die("%s: unknown parameter type %d",
