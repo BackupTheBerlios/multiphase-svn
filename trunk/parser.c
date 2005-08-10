@@ -82,6 +82,7 @@ static void mark_as_not_found(struct param *params)
 {
 	int i;
 
+	i = 0;
 	while (params[i].name) {
 		params[i].found = 0;
 		i++;
