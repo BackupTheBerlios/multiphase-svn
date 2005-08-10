@@ -78,6 +78,19 @@ void free_tokens(struct token *token)
 	}
 }
 
+/* Free arrays allocated by get_array(). */
+void free_arrays(struct param *params)
+{
+	int i;
+
+	i = 0;
+	while (params[i].name) {
+		if (params[i].type == ARRAY)
+			free(params[i].value);
+		i++;
+	}
+}
+
 static void mark_as_not_found(struct param *params)
 {
 	int i;
@@ -102,6 +115,34 @@ static int to_number(char *string, long double *ret)
 	return 0;
 }
 
+/* Allocate array of numbers and fill it from list of tokens. Proceed until
+   first non-number. */
+static void get_array(struct param *param, struct token *head)
+{
+	struct token *tmp;
+	int len, i;
+
+	/* Find out how many numbers there are. */
+	tmp = head;
+	len = 0;
+	while (tmp && to_number(tmp->string, NULL) == 0) {
+		len++;
+		tmp = tmp->next;
+	}
+	if (len == 0)
+		die("%s: missing value for \"%s\"", __func__, head->string);
+
+	param->value = xmalloc(len * sizeof(*param->value));
+
+	/* Fill the array. */
+	tmp = head;
+	i = 0;
+	while (tmp && to_number(tmp->string, &param->value[i]) == 0) {
+		i++;
+		tmp = tmp->next;
+	}
+}
+
 void get_values(struct token *token, struct param *params)
 {
 	int i;
@@ -122,13 +163,39 @@ void get_values(struct token *token, struct param *params)
 						die("%s: expected number, "
 							"got \"%s\"", __func__,
 							token->next->string);
+					token = token->next;
+					break;
+				case ARRAY: {
+					struct token *prev;
+
+					if (to_number(token->next->string,
+								NULL) < 0)
+						die("%s: missing value for "
+							"\"%s\"", __func__,
+							params[i].name);
+
+					get_array(&params[i], token->next);
+
+					/* Bump current token to the first not
+					   used one. */
+					prev = token;
+					token = token->next;
+					while (token &&
+						to_number(token->string,
+								NULL) == 0) {
+						token = token->next;
+						prev = prev->next;
+					}
+					/* Compensate for "token = token->next"
+					   after "found:". */
+					token = prev;
+				}
 					break;
 				default:
 					die("%s: unknown parameter type %d",
 						__func__, params[i].type);
 				}
 				params[i].found = 1;
-				token = token->next;
 				goto found;
 			}
 			i++;

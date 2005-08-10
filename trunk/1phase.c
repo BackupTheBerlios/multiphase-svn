@@ -71,7 +71,10 @@ static struct param params[] = {
 		.value = &c,
 		.type = NUMBER,
 	}, {
-	},
+		.name = "p_x0",
+		.type = ARRAY,
+	}, {
+	}
 };
 
 /* Initial conditions */
@@ -158,6 +161,8 @@ int main(void)
 			p[i] = p1[i];
 		print_array(p);
 	}
+
+	free_arrays(params);
 
 	return EXIT_SUCCESS;
 }

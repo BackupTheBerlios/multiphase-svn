@@ -27,6 +27,7 @@ void free_tokens(struct token *token);
 
 enum param_type {
 	NUMBER,
+	ARRAY,
 };
 
 struct param {
@@ -37,5 +38,6 @@ struct param {
 };
 
 void get_values(struct token *token, struct param *params);
+void free_arrays(struct param *params);
 
 #endif /* ndef __PARSER_H__ */
