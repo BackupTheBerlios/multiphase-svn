@@ -214,15 +214,14 @@ found:
 	}
 }
 
-long double * find_array(char *name, struct param *params)
+struct param * find_param(char *name, struct param *params)
 {
 	int i;
 
 	i = 0;
-	while (params[i].name && strcmp(params[i].name, name) != 0) {
-		if (params[i].type == ARRAY)
-			break;
+	while (params[i].name && strcmp(params[i].name, name) != 0)
 		i++;
-	}
-	return params[i].name ? params[i].value : NULL;
+	if (!params[i].name)
+		die("%s: can't find \"%s\" param", __func__, name);
+	return &params[i];
 }

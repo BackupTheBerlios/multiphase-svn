@@ -39,6 +39,6 @@ struct param {
 
 void get_values(struct param *params, struct token *token);
 void free_arrays(struct param *params);
-long double * find_array(char *name, struct param *params);
+struct param * find_param(char *name, struct param *params);
 
 #endif /* ndef __PARSER_H__ */

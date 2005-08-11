@@ -123,14 +123,14 @@ int main(void)
 	int i;
 
 	struct token *head;
+	struct param *p_x0_param;
 
 	head = tokenize();
 	get_values(params, head);
 	free_tokens(head);
 
-	p_x0_data = find_array("p_x0", params);
-	if (!p_x0_data)
-		die("%s: can't find \"%s\" array", __func__, "p_x0");
+	p_x0_param = find_param("p_x0", params);
+	p_x0_data = p_x0_param->value;
 
 	for (i = 0; i < N; i++)
 		if (p_x0_data[i] < 0.0)
