@@ -25,6 +25,8 @@ static int N;
 static long double DX;
 /* uniform timesteps */
 static long double DT;
+/* number of timesteps */
+static long double NT;
 
 #define print_array(a) __print_array(#a, a)
 
@@ -53,6 +55,10 @@ static struct param params[] = {
 	}, {
 		.name = "DT",
 		.value = &DT,
+		.type = NUMBER,
+	}, {
+		.name = "NT",
+		.value = &NT,
 		.type = NUMBER,
 	}, {
 		.name = "K",
@@ -168,6 +174,8 @@ int main(void)
 		die("%s: DX = %Lf <= 0.0", __func__, DX);
 	if (DT <= 0.0)
 		die("%s: DT = %Lf <= 0.0", __func__, DT);
+	if ((int)NT <= 0)
+		die("%s: NT = %d <= 0", __func__, (int)NT);
 	if (K <= 0.0)
 		die("%s: K = %Lf <= 0.0", __func__, K);
 	if (phi <= 0.0 || phi > 1.0)
@@ -182,7 +190,7 @@ int main(void)
 	print_array(p);
 
 	t = 0;
-	for (t = 0; t < 20; t++) {
+	for (t = 0; t < (int)NT; t++) {
 		p1[0] = p_lt(t);
 		for (i = 1; i <= N - 2; i++)
 			p1[i] = p[i] + DT * K / (phi * mu * c) * d2f_dx2(i, p);
