@@ -115,6 +115,12 @@ static int to_number(char *string, long double *ret)
 	return 0;
 }
 
+static void get_number(struct param *param, struct token *token)
+{
+	if (to_number(token->string, param->value) < 0)
+		die("%s: expected number, got \"%s\"", __func__, token->string);
+}
+
 /* Allocate array of numbers and fill it from list of tokens. Proceed until
    first non-number. */
 static void get_array(struct param *param, struct token *head)
@@ -158,11 +164,7 @@ void get_values(struct token *token, struct param *params)
 						__func__, params[i].name);
 				switch (params[i].type) {
 				case NUMBER:
-					if (to_number(token->next->string,
-							params[i].value) < 0)
-						die("%s: expected number, "
-							"got \"%s\"", __func__,
-							token->next->string);
+					get_number(&params[i], token->next);
 					token = token->next;
 					break;
 				case ARRAY: {
