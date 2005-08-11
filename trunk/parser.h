@@ -35,6 +35,8 @@ struct param {
 	long double *value;
 	int found;
 	enum param_type type;
+	/* used only by ARRAY */
+	int nr_elements;
 };
 
 void get_values(struct param *params, struct token *token);

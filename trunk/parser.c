@@ -147,6 +147,7 @@ static void get_array(struct param *param, struct token *head)
 		i++;
 		tmp = tmp->next;
 	}
+	param->nr_elements = len;
 }
 
 /* Get either one number or an array. Return last used token. */
