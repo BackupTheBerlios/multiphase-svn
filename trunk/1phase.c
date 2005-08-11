@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 #include "misc.h"
 #include "parser.h"
 
-#define N 10
+static int N;
 /* uniform grid */
 static long double DX;
 /* uniform timesteps */
@@ -119,7 +119,9 @@ int main(void)
 	/* timestep */
 	int t;
 	/* current pressure p(x, t) */
-	long double p[N];
+	long double *p;
+	/* p(x, t + dt) */
+	long double *p1;
 	int i;
 
 	struct token *head;
@@ -131,6 +133,9 @@ int main(void)
 
 	p_x0_param = find_param("p_x0", params);
 	p_x0_data = p_x0_param->value;
+	N = p_x0_param->nr_elements;
+	p = xmalloc(N * sizeof(*p));
+	p1 = xmalloc(N * sizeof(*p1));
 
 	for (i = 0; i < N; i++)
 		if (p_x0_data[i] < 0.0)
@@ -155,9 +160,6 @@ int main(void)
 
 	t = 0;
 	for (t = 0; t < 20; t++) {
-		/* p(x, t + dt) */
-		long double p1[N];
-
 		p1[0] = p_lt(t);
 		for (i = 1; i <= N - 2; i++)
 			p1[i] = p[i] + DT * K / (phi * mu * c) * d2f_dx2(i, p);
@@ -169,6 +171,8 @@ int main(void)
 	}
 
 	free_arrays(params);
+	free(p);
+	free(p1);
 
 	return EXIT_SUCCESS;
 }
