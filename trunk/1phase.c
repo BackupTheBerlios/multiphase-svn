@@ -74,6 +74,12 @@ static struct param params[] = {
 		.name = "p_x0",
 		.type = ARRAY,
 	}, {
+		.name = "p_lt",
+		.type = ARRAY,
+	}, {
+		.name = "p_rt",
+		.type = ARRAY,
+	}, {
 	}
 };
 
@@ -88,23 +94,31 @@ static long double p_x0(int i)
 }
 
 /* Left boundary condition */
+static long double *p_lt_data;
+static int p_lt_N;
+
 static long double p_lt(int t)
 {
 	if (t < 0)
 		die("%s: %d not in [0, \\infty)", __func__, t);
-	if (t < 10)
-		return 105.0;
-	return 90.0;
+	/* Last value in input remains forever. */
+	if (t >= p_lt_N)
+		return p_lt_data[p_lt_N - 1];
+	return p_lt_data[t];
 }
 
 /* Right boundary condition */
+static long double *p_rt_data;
+static int p_rt_N;
+
 static long double p_rt(int t)
 {
 	if (t < 0)
 		die("%s: %d not in [0, \\infty)", __func__, t);
-	if (t < 10)
-		return 90.0;
-	return 105.0;
+	/* Last value in input remains forever. */
+	if (t >= p_rt_N)
+		return p_rt_data[p_rt_N - 1];
+	return p_rt_data[t];
 }
 
 static long double d2f_dx2(int i, long double *f)
@@ -125,7 +139,7 @@ int main(void)
 	int i;
 
 	struct token *head;
-	struct param *p_x0_param;
+	struct param *p_x0_param, *p_lt_param, *p_rt_param;
 
 	head = tokenize();
 	get_values(params, head);
@@ -134,6 +148,15 @@ int main(void)
 	p_x0_param = find_param("p_x0", params);
 	p_x0_data = p_x0_param->value;
 	N = p_x0_param->nr_elements;
+
+	p_lt_param = find_param("p_lt", params);
+	p_lt_data = p_lt_param->value;
+	p_lt_N = p_lt_param->nr_elements;
+
+	p_rt_param = find_param("p_rt", params);
+	p_rt_data = p_rt_param->value;
+	p_rt_N = p_rt_param->nr_elements;
+
 	p = xmalloc(N * sizeof(*p));
 	p1 = xmalloc(N * sizeof(*p1));
 
