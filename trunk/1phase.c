@@ -125,7 +125,7 @@ int main(void)
 	struct token *head;
 
 	head = tokenize();
-	get_values(head, params);
+	get_values(params, head);
 	free_tokens(head);
 
 	p_x0_data = find_array("p_x0", params);

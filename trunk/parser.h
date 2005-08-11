@@ -37,7 +37,7 @@ struct param {
 	enum param_type type;
 };
 
-void get_values(struct token *token, struct param *params);
+void get_values(struct param *params, struct token *token);
 void free_arrays(struct param *params);
 long double * find_array(char *name, struct param *params);
 

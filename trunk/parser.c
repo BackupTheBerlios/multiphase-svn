@@ -185,7 +185,7 @@ static struct token * get_param(struct param *param, struct token *token)
 	return token;
 }
 
-void get_values(struct token *token, struct param *params)
+void get_values(struct param *params, struct token *token)
 {
 	int i;
 
