@@ -149,6 +149,42 @@ static void get_array(struct param *param, struct token *head)
 	}
 }
 
+/* Get either one number or an array. Return last used token. */
+static struct token * get_param(struct param *param, struct token *token)
+{
+	if (!token->next)
+		die("%s: missing value for \"%s\"", __func__, param->name);
+	switch (param->type) {
+	case NUMBER:
+		token = token->next;
+		get_number(param, token);
+		break;
+	case ARRAY: {
+		struct token *prev;
+
+		prev = token;
+		token = token->next;
+		if (to_number(token->string, NULL) < 0)
+			die("%s: missing value for \"%s\"", __func__,
+				param->name);
+
+		get_array(param, token);
+
+		/* Bump current token to the first not used one. */
+		while (token &&	to_number(token->string, NULL) == 0) {
+			token = token->next;
+			prev = prev->next;
+		}
+		/* Compensate for "token = token->next" in get_values(). */
+		token = prev;
+	}
+		break;
+	default:
+		die("%s: unknown parameter type %d", __func__, param->type);
+	}
+	return token;
+}
+
 void get_values(struct token *token, struct param *params)
 {
 	int i;
@@ -159,44 +195,7 @@ void get_values(struct token *token, struct param *params)
 		i = 0;
 		while (params[i].name) {
 			if (strcmp(token->string, params[i].name) == 0) {
-				if (!token->next)
-					die("%s: missing value for \"%s\"",
-						__func__, params[i].name);
-				switch (params[i].type) {
-				case NUMBER:
-					get_number(&params[i], token->next);
-					token = token->next;
-					break;
-				case ARRAY: {
-					struct token *prev;
-
-					if (to_number(token->next->string,
-								NULL) < 0)
-						die("%s: missing value for "
-							"\"%s\"", __func__,
-							params[i].name);
-
-					get_array(&params[i], token->next);
-
-					/* Bump current token to the first not
-					   used one. */
-					prev = token;
-					token = token->next;
-					while (token &&
-						to_number(token->string,
-								NULL) == 0) {
-						token = token->next;
-						prev = prev->next;
-					}
-					/* Compensate for "token = token->next"
-					   after "found:". */
-					token = prev;
-				}
-					break;
-				default:
-					die("%s: unknown parameter type %d",
-						__func__, params[i].type);
-				}
+				token = get_param(&params[i], token);
 				params[i].found = 1;
 				goto found;
 			}
