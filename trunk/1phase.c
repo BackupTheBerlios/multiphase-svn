@@ -189,8 +189,7 @@ int main(void)
 		p[i] = p_x0(i);
 	print_array(p);
 
-	t = 0;
-	for (t = 0; t < (int)NT; t++) {
+	for (t = 1; t < (int)NT; t++) {
 		p1[0] = p_lt(t);
 		for (i = 1; i <= N - 2; i++)
 			p1[i] = p[i] + DT * K / (phi * mu * c) * d2f_dx2(i, p);
