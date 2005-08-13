@@ -190,7 +190,8 @@ void get_values(struct param *params, struct token *token)
 		for (i = 0; params[i].name; i++)
 			if (strcmp(token->string, params[i].name) == 0) {
 				if (params[i].found)
-					die("%s: \"%s\" already found", __func__, params[i].name);
+					die("%s: \"%s\" already found",
+						__func__, params[i].name);
 				token = get_param(&params[i], token);
 				params[i].found = 1;
 				goto found;
@@ -202,7 +203,8 @@ found:
 
 	for (i = 0; params[i].name; i++)
 		if (!params[i].found)
-			die("%s: no value for %s", __func__, params[i].name);
+			die("%s: no value for \"%s\"", __func__,
+				params[i].name);
 }
 
 struct param * find_param(char *name, struct param *params)
@@ -213,6 +215,6 @@ struct param * find_param(char *name, struct param *params)
 		if (strcmp(params[i].name, name) == 0)
 			break;
 	if (!params[i].name)
-		die("%s: can't find \"%s\" param", __func__, name);
+		die("%s: can't find \"%s\" parameter", __func__, name);
 	return &params[i];
 }
