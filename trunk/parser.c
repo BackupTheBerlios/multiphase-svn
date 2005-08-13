@@ -189,6 +189,8 @@ void get_values(struct param *params, struct token *token)
 	while (token) {
 		for (i = 0; params[i].name; i++)
 			if (strcmp(token->string, params[i].name) == 0) {
+				if (params[i].found)
+					die("%s: \"%s\" already found", __func__, params[i].name);
 				token = get_param(&params[i], token);
 				params[i].found = 1;
 				goto found;
