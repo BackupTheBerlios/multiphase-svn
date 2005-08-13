@@ -83,23 +83,17 @@ void free_arrays(struct param *params)
 {
 	int i;
 
-	i = 0;
-	while (params[i].name) {
+	for (i = 0; params[i].name; i++)
 		if (params[i].type == ARRAY)
 			free(params[i].value);
-		i++;
-	}
 }
 
 static void mark_as_not_found(struct param *params)
 {
 	int i;
 
-	i = 0;
-	while (params[i].name) {
+	for (i = 0; params[i].name; i++)
 		params[i].found = 0;
-		i++;
-	}
 }
 
 static int to_number(char *string, long double *ret)
@@ -193,35 +187,29 @@ void get_values(struct param *params, struct token *token)
 	mark_as_not_found(params);
 
 	while (token) {
-		i = 0;
-		while (params[i].name) {
+		for (i = 0; params[i].name; i++)
 			if (strcmp(token->string, params[i].name) == 0) {
 				token = get_param(&params[i], token);
 				params[i].found = 1;
 				goto found;
 			}
-			i++;
-		}
 		die("%s: unknown token \"%s\"", __func__, token->string);
 found:
 		token = token->next;
 	}
 
-	i = 0;
-	while (params[i].name) {
+	for (i = 0; params[i].name; i++)
 		if (!params[i].found)
 			die("%s: no value for %s", __func__, params[i].name);
-		i++;
-	}
 }
 
 struct param * find_param(char *name, struct param *params)
 {
 	int i;
 
-	i = 0;
-	while (params[i].name && strcmp(params[i].name, name) != 0)
-		i++;
+	for (i = 0; params[i].name; i++)
+		if (strcmp(params[i].name, name) == 0)
+			break;
 	if (!params[i].name)
 		die("%s: can't find \"%s\" param", __func__, name);
 	return &params[i];
