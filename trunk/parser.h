@@ -27,12 +27,13 @@ void free_tokens(struct token *token);
 
 enum param_type {
 	FLOAT,
+	INTEGER,
 	ARRAY,
 };
 
 struct param {
 	char *name;
-	long double *value;
+	void *value;
 	int found;
 	enum param_type type;
 	/* used only by ARRAY */

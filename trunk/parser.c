@@ -109,10 +109,30 @@ static int to_float(char *string, long double *ret)
 	return 0;
 }
 
+static int to_integer(char *string, long *ret)
+{
+	long number;
+	char *end;
+
+	number = strtol(string, &end, 10);
+	if (end == string || *end)
+		return -1;
+	if (ret)
+		*ret = number;
+	return 0;
+}
+
 static void get_float(struct param *param, struct token *token)
 {
 	if (to_float(token->string, param->value) < 0)
 		die("%s: expected number, got \"%s\"", __func__, token->string);
+}
+
+static void get_integer(struct param *param, struct token *token)
+{
+	if (to_integer(token->string, param->value) < 0)
+		die("%s: expected integer, got \"%s\"", __func__,
+			token->string);
 }
 
 /* Allocate array of numbers and fill it from list of tokens. Proceed until
@@ -132,12 +152,13 @@ static void get_array(struct param *param, struct token *head)
 	if (len == 0)
 		die("%s: missing value for \"%s\"", __func__, head->string);
 
-	param->value = xmalloc(len * sizeof(*param->value));
+	param->value = xmalloc(len * sizeof(long double));
 
 	/* Fill the array. */
 	tmp = head;
 	i = 0;
-	while (tmp && to_float(tmp->string, &param->value[i]) == 0) {
+	while (tmp && to_float(tmp->string,
+				(long double *)param->value + i) == 0) {
 		i++;
 		tmp = tmp->next;
 	}
@@ -153,6 +174,10 @@ static struct token * get_param(struct param *param, struct token *token)
 	case FLOAT:
 		token = token->next;
 		get_float(param, token);
+		break;
+	case INTEGER:
+		token = token->next;
+		get_integer(param, token);
 		break;
 	case ARRAY: {
 		struct token *prev;
