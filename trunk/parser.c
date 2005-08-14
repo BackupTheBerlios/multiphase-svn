@@ -122,17 +122,16 @@ static int to_integer(char *string, long *ret)
 	return 0;
 }
 
-static void get_float(struct param *param, struct token *token)
+static void get_float(struct param *param, char *string)
 {
-	if (to_float(token->string, param->value) < 0)
-		die("%s: expected number, got \"%s\"", __func__, token->string);
+	if (to_float(string, param->value) < 0)
+		die("%s: expected number, got \"%s\"", __func__, string);
 }
 
-static void get_integer(struct param *param, struct token *token)
+static void get_integer(struct param *param, char *string)
 {
-	if (to_integer(token->string, param->value) < 0)
-		die("%s: expected integer, got \"%s\"", __func__,
-			token->string);
+	if (to_integer(string, param->value) < 0)
+		die("%s: expected integer, got \"%s\"", __func__, string);
 }
 
 /* Allocate array of numbers and fill it from list of tokens. Proceed until
@@ -173,11 +172,11 @@ static struct token * get_param(struct param *param, struct token *token)
 	switch (param->type) {
 	case FLOAT:
 		token = token->next;
-		get_float(param, token);
+		get_float(param, token->string);
 		break;
 	case INTEGER:
 		token = token->next;
-		get_integer(param, token);
+		get_integer(param, token->string);
 		break;
 	case ARRAY: {
 		struct token *prev;
