@@ -96,7 +96,7 @@ static void mark_as_not_found(struct param *params)
 		params[i].found = 0;
 }
 
-static int to_number(char *string, long double *ret)
+static int to_float(char *string, long double *ret)
 {
 	long double number;
 	char *end;
@@ -109,9 +109,9 @@ static int to_number(char *string, long double *ret)
 	return 0;
 }
 
-static void get_number(struct param *param, struct token *token)
+static void get_float(struct param *param, struct token *token)
 {
-	if (to_number(token->string, param->value) < 0)
+	if (to_float(token->string, param->value) < 0)
 		die("%s: expected number, got \"%s\"", __func__, token->string);
 }
 
@@ -125,7 +125,7 @@ static void get_array(struct param *param, struct token *head)
 	/* Find out how many numbers there are. */
 	tmp = head;
 	len = 0;
-	while (tmp && to_number(tmp->string, NULL) == 0) {
+	while (tmp && to_float(tmp->string, NULL) == 0) {
 		len++;
 		tmp = tmp->next;
 	}
@@ -137,7 +137,7 @@ static void get_array(struct param *param, struct token *head)
 	/* Fill the array. */
 	tmp = head;
 	i = 0;
-	while (tmp && to_number(tmp->string, &param->value[i]) == 0) {
+	while (tmp && to_float(tmp->string, &param->value[i]) == 0) {
 		i++;
 		tmp = tmp->next;
 	}
@@ -152,21 +152,21 @@ static struct token * get_param(struct param *param, struct token *token)
 	switch (param->type) {
 	case FLOAT:
 		token = token->next;
-		get_number(param, token);
+		get_float(param, token);
 		break;
 	case ARRAY: {
 		struct token *prev;
 
 		prev = token;
 		token = token->next;
-		if (to_number(token->string, NULL) < 0)
+		if (to_float(token->string, NULL) < 0)
 			die("%s: missing value for \"%s\"", __func__,
 				param->name);
 
 		get_array(param, token);
 
 		/* Bump current token to the first not used one. */
-		while (token &&	to_number(token->string, NULL) == 0) {
+		while (token &&	to_float(token->string, NULL) == 0) {
 			token = token->next;
 			prev = prev->next;
 		}
