@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 #include <stddef.h>
 #include <stdio.h>
 
-void __die(char *fmt, ...);
+void __die(const char *fmt, ...) __attribute__((format (printf, 1, 2)));
 #define die(fmt, args...)				\
 	do {						\
 		fprintf(stderr, "%s: ", __func__);	\

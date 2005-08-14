@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 
 #include "misc.h"
 
-void __die(char *fmt, ...)
+void __die(const char *fmt, ...)
 {
 	va_list args;
 	static char excuse[512];
