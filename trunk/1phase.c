@@ -174,7 +174,7 @@ int main(void)
 	if (DT <= 0.0)
 		die("DT = %Lf <= 0.0", DT);
 	if (NT <= 0)
-		die("NT = %d <= 0", NT);
+		die("NT = %ld <= 0", NT);
 	if (K <= 0.0)
 		die("K = %Lf <= 0.0", K);
 	if (phi <= 0.0 || phi > 1.0)
