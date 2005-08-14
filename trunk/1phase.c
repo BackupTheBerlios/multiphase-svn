@@ -51,31 +51,31 @@ static struct param params[] = {
 	{
 		.name = "DX",
 		.value = &DX,
-		.type = NUMBER,
+		.type = FLOAT,
 	}, {
 		.name = "DT",
 		.value = &DT,
-		.type = NUMBER,
+		.type = FLOAT,
 	}, {
 		.name = "NT",
 		.value = &NT,
-		.type = NUMBER,
+		.type = FLOAT,
 	}, {
 		.name = "K",
 		.value = &K,
-		.type = NUMBER,
+		.type = FLOAT,
 	}, {
 		.name = "phi",
 		.value = &phi,
-		.type = NUMBER,
+		.type = FLOAT,
 	}, {
 		.name = "mu",
 		.value = &mu,
-		.type = NUMBER,
+		.type = FLOAT,
 	}, {
 		.name = "c",
 		.value = &c,
-		.type = NUMBER,
+		.type = FLOAT,
 	}, {
 		.name = "p_x0",
 		.type = ARRAY,

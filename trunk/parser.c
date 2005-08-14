@@ -150,7 +150,7 @@ static struct token * get_param(struct param *param, struct token *token)
 	if (!token->next)
 		die("%s: missing value for \"%s\"", __func__, param->name);
 	switch (param->type) {
-	case NUMBER:
+	case FLOAT:
 		token = token->next;
 		get_number(param, token);
 		break;

@@ -26,7 +26,7 @@ struct token * tokenize(void);
 void free_tokens(struct token *token);
 
 enum param_type {
-	NUMBER,
+	FLOAT,
 	ARRAY,
 };
 
