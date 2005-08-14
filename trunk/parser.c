@@ -36,7 +36,7 @@ static int get_token(int c, char **string)
 		c = getchar();
 	}
 	if (pos == sizeof(buf))
-		die("%s: token \"%s\" too long", __func__, buf);
+		die("token \"%s\" too long", buf);
 	buf[pos] = '\0';
 	*string = xmalloc(strlen(buf) + 1);
 	strcpy(*string, buf);
@@ -125,13 +125,13 @@ static int to_integer(char *string, long *ret)
 static void get_float(struct param *param, char *string)
 {
 	if (to_float(string, param->value) < 0)
-		die("%s: expected number, got \"%s\"", __func__, string);
+		die("expected number, got \"%s\"", string);
 }
 
 static void get_integer(struct param *param, char *string)
 {
 	if (to_integer(string, param->value) < 0)
-		die("%s: expected integer, got \"%s\"", __func__, string);
+		die("expected integer, got \"%s\"", string);
 }
 
 /* Allocate array of numbers and fill it from list of tokens. Proceed until
@@ -149,7 +149,7 @@ static void get_array(struct param *param, struct token *head)
 		tmp = tmp->next;
 	}
 	if (len == 0)
-		die("%s: missing value for \"%s\"", __func__, head->string);
+		die("missing value for \"%s\"", head->string);
 
 	param->value = xmalloc(len * sizeof(long double));
 
@@ -168,7 +168,7 @@ static void get_array(struct param *param, struct token *head)
 static struct token * get_param(struct param *param, struct token *token)
 {
 	if (!token->next)
-		die("%s: missing value for \"%s\"", __func__, param->name);
+		die("missing value for \"%s\"", param->name);
 	switch (param->type) {
 	case FLOAT:
 		token = token->next;
@@ -184,8 +184,7 @@ static struct token * get_param(struct param *param, struct token *token)
 		prev = token;
 		token = token->next;
 		if (to_float(token->string, NULL) < 0)
-			die("%s: missing value for \"%s\"", __func__,
-				param->name);
+			die("missing value for \"%s\"", param->name);
 
 		get_array(param, token);
 
@@ -199,7 +198,7 @@ static struct token * get_param(struct param *param, struct token *token)
 	}
 		break;
 	default:
-		die("%s: unknown parameter type %d", __func__, param->type);
+		die("unknown parameter type %d", param->type);
 	}
 	return token;
 }
@@ -214,21 +213,20 @@ void get_values(struct param *params, struct token *token)
 		for (i = 0; params[i].name; i++)
 			if (strcmp(token->string, params[i].name) == 0) {
 				if (params[i].found)
-					die("%s: \"%s\" already found",
-						__func__, params[i].name);
+					die("\"%s\" already found",
+						params[i].name);
 				token = get_param(&params[i], token);
 				params[i].found = 1;
 				goto found;
 			}
-		die("%s: unknown token \"%s\"", __func__, token->string);
+		die("unknown token \"%s\"", token->string);
 found:
 		token = token->next;
 	}
 
 	for (i = 0; params[i].name; i++)
 		if (!params[i].found)
-			die("%s: no value for \"%s\"", __func__,
-				params[i].name);
+			die("no value for \"%s\"", params[i].name);
 }
 
 struct param * find_param(char *name, struct param *params)
@@ -239,6 +237,6 @@ struct param * find_param(char *name, struct param *params)
 		if (strcmp(params[i].name, name) == 0)
 			break;
 	if (!params[i].name)
-		die("%s: can't find \"%s\" parameter", __func__, name);
+		die("can't find \"%s\" parameter", name);
 	return &params[i];
 }

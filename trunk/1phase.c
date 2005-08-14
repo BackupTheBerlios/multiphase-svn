@@ -95,7 +95,7 @@ static long double *p_x0_data;
 static long double p_x0(int i)
 {
 	if (i < 0 || i > N - 1)
-		die("%s: %d not in [%d, %d]", __func__, i, 0, N - 1);
+		die("%d not in [%d, %d]", i, 0, N - 1);
 	return p_x0_data[i];
 }
 
@@ -106,7 +106,7 @@ static int p_lt_N;
 static long double p_lt(int t)
 {
 	if (t < 0)
-		die("%s: %d not in [0, \\infty)", __func__, t);
+		die("%d not in [0, \\infty)", t);
 	/* Last value in input remains forever. */
 	if (t >= p_lt_N)
 		return p_lt_data[p_lt_N - 1];
@@ -120,7 +120,7 @@ static int p_rt_N;
 static long double p_rt(int t)
 {
 	if (t < 0)
-		die("%s: %d not in [0, \\infty)", __func__, t);
+		die("%d not in [0, \\infty)", t);
 	/* Last value in input remains forever. */
 	if (t >= p_rt_N)
 		return p_rt_data[p_rt_N - 1];
@@ -130,7 +130,7 @@ static long double p_rt(int t)
 static long double d2f_dx2(int i, long double *f)
 {
 	if (i < 1 || i > N - 2)
-		die("%s: %d not in [%u, %u]", __func__, i, 1, N - 2);
+		die("%d not in [%u, %u]", i, 1, N - 2);
 	return (f[i - 1] - 2 * f[i] + f[i + 1]) / (DX * DX);
 }
 
@@ -168,22 +168,21 @@ int main(void)
 
 	for (i = 0; i < N; i++)
 		if (p_x0_data[i] < 0.0)
-			die("%s: p_x0[%u] = %Lf < 0.0",	__func__,
-				i, p_x0_data[i]);
+			die("p_x0[%u] = %Lf < 0.0", i, p_x0_data[i]);
 	if (DX <= 0.0)
-		die("%s: DX = %Lf <= 0.0", __func__, DX);
+		die("DX = %Lf <= 0.0", DX);
 	if (DT <= 0.0)
-		die("%s: DT = %Lf <= 0.0", __func__, DT);
+		die("DT = %Lf <= 0.0", DT);
 	if (NT <= 0)
-		die("%s: NT = %d <= 0", __func__, NT);
+		die("NT = %d <= 0", NT);
 	if (K <= 0.0)
-		die("%s: K = %Lf <= 0.0", __func__, K);
+		die("K = %Lf <= 0.0", K);
 	if (phi <= 0.0 || phi > 1.0)
-		die("%s: phi = %Lf not in (0.0, 1.0]", __func__, phi);
+		die("phi = %Lf not in (0.0, 1.0]", phi);
 	if (mu <= 0.0)
-		die("%s: mu = %Lf <= 0.0", __func__, mu);
+		die("mu = %Lf <= 0.0", mu);
 	if (c <= 0.0)
-		die("%s: c = %Lf <= 0.0", __func__, c);
+		die("c = %Lf <= 0.0", c);
 
 	for (i = 0; i < N; i++)
 		p[i] = p_x0(i);

@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 
 #include "misc.h"
 
-void die(char *fmt, ...)
+void __die(char *fmt, ...)
 {
 	va_list args;
 	static char excuse[512];
@@ -39,6 +39,6 @@ void * xmalloc(size_t size)
 
 	ret = malloc(size);
 	if (!ret)
-		die("%s: not enough memory for %zu bytes", __func__, size);
+		die("not enough memory for %zu bytes", size);
 	return ret;
 }

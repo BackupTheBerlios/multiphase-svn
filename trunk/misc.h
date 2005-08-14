@@ -18,8 +18,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 #define __MISC_H__
 
 #include <stddef.h>
+#include <stdio.h>
 
-void die(char *fmt, ...);
+void __die(char *fmt, ...);
+#define die(fmt, args...)				\
+	do {						\
+		fprintf(stderr, "%s: ", __func__);	\
+		__die(fmt, ##args);			\
+	} while (0);
 
 void * xmalloc(size_t size);
 
