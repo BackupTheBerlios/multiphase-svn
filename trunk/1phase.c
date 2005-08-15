@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA */
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -163,6 +164,8 @@ int main(void)
 	p_rt_data = p_rt_param->value;
 	p_rt_N = p_rt_param->nr_elements;
 
+	if (N > SIZE_MAX / sizeof(*p))
+		die("N = %u > %zu", N, SIZE_MAX / sizeof(*p));
 	p = xmalloc(N * sizeof(*p));
 	p1 = xmalloc(N * sizeof(*p1));
 
