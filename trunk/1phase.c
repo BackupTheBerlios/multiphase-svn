@@ -186,6 +186,11 @@ int main(void)
 		die("mu = %Lf <= 0.0", mu);
 	if (c <= 0.0)
 		die("c = %Lf <= 0.0", c);
+	if (DT / (DX * DX) > 1 / (2 * (K / (phi * mu * c))))
+		die("finite difference scheme isn't numerically stable: "
+			"\\frac{\\Delta t}{(\\Delta t)^2} = %Lf > "
+			"\\frac{1}{2 \\frac{K}{\\phi \\mu \\c}} = %Lf",
+			DT / (DX * DX), 1 / (2 * (K / (phi * mu * c))));
 
 	for (i = 0; i < N; i++)
 		p[i] = p_x0(i);
