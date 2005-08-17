@@ -134,5 +134,48 @@ p_{N - 1, j} = p_{r t}(j \Delta t), j \geq 0
 j} - 2 p_{i j} + p_{i + 1, j}}{(\Delta x)^2}, 1 \leq i \leq N - 2, j \geq 1
 \end{equation}
 
+\section{Numerical Stability}
+
+\begin{equation}
+\frac{\partial p}{\partial t} = a^2 \frac{\partial^2 p}{\partial x^2}
+\end{equation}
+\begin{equation}
+\frac{p_{m, n + 1} - p_{m n}}{\Delta t} = a^2 \frac{p_{m - 1, n} - 2 p_{m n} +
+p_{m + 1, n}}{(\Delta x)^2}
+\end{equation}
+\begin{equation}
+p_{m n} = \gamma^n e^{i p m \Delta x}
+\end{equation}
+\begin{equation}
+\frac{\gamma^{n + 1} e^{i p m \Delta x} - \gamma^n e^{i p m \Delta x}}{\Delta
+t} = a^2 \frac{\gamma^n e^{i p (m - 1) \Delta x} - 2 \gamma^n e^{i p m \Delta
+x} + \gamma^n e^{i p (m + 1) \Delta x}}{(\Delta x)^2}
+\end{equation}
+$\frac{\gamma - 1}{\Delta t} = a^2 \frac{e^{-i p \Delta x} - 2 + e^{i p \Delta
+x}}{(\Delta x)^2} = 2 a^2 \frac{cos(p \Delta x) - 1}{(\Delta x)^2} = -4 a^2
+\frac{\sin^2 \frac{p \Delta x}{2}}{(\Delta x)^2}$
+\begin{equation}
+\gamma = 1 - 4 a^2 \frac{\Delta t}{(\Delta x)^2} \sin^2 \frac{p \Delta x}{2}
+\end{equation}
+
+For a finite difference scheme to be numerically stable, $|\gamma|$ must be
+less or equal to 1.
+\begin{equation}
+-1 \leq 1 - 4 a^2 \frac{\Delta t}{(\Delta x)^2} \sin^2 \frac{p \Delta x}{2}
+\leq 1
+\end{equation}
+\begin{equation}
+\frac{\Delta t}{(\Delta x)^2} \leq \frac{1}{2 a^2 \sin^2 \frac{p \Delta x}{2}}
+\end{equation}
+or even
+\begin{equation}
+\frac{\Delta t}{(\Delta x)^2} \leq \frac{1}{2 a^2}
+\end{equation}
+
+In the simplest case:
+\begin{equation}
+a^2 = \frac{K}{\phi \mu c}
+\end{equation}
+
 \input{gpl_notice.tex}
 \end{document}
