@@ -34,5 +34,4 @@ dvi: $(TEX)
 	for file in $(TEX); do latex $$file; done
 
 clean:
-	rm -f $(PROGRAM) $(OBJECTS) $(subst .tex,.dvi,$(TEX)) \
-	$(subst .tex,.aux,$(TEX)) $(subst .tex,.log,$(TEX))
+	rm -f $(PROGRAM) $(OBJECTS) $(subst .tex,.dvi,$(TEX)) $(subst .tex,.aux,$(TEX)) $(subst .tex,.log,$(TEX))
