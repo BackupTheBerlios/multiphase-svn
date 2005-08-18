@@ -29,14 +29,14 @@ static long double DT;
 /* number of timesteps */
 static long NT;
 
-#define print_array(a) __print_array(#a, a)
-
-static void __print_array(char *s, long double *p)
+static void print_array(long double *p)
 {
 	int i;
 
-	for (i = 0; i < N; i++)
-		printf("%s[%u] = %s(%Lf) = %Lf\n", s, i, s, i * DX, p[i]);
+	printf("%Lf", p[0]);
+	for (i = 1; i < N; i++)
+		printf(" %Lf", p[i]);
+	printf("\n");
 }
 
 /* permeability */
