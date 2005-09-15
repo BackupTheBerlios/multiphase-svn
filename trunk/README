@@ -4,6 +4,15 @@ Multiphase flow simulator
 http://multiphase.berlios.de/
 ftp://ftp.berlios.de/pub/multiphase/
 
+Compiling
+---------
+
+Simply type
+
+	make
+
+Provided you have C99 compliant compiler, "1phase" executable should be built.
+
 1-phase flow simulator
 ----------------------
 
