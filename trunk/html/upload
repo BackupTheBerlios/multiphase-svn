@@ -1,0 +1,3 @@
+#!/bin/sh -x
+
+scp "$@" adobriyan@shell.berlios.de:/home/groups/multiphase/htdocs/
