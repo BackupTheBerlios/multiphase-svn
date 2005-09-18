@@ -164,10 +164,10 @@ int main(void)
 	p_rt_data = p_rt_param->value;
 	p_rt_N = p_rt_param->nr_elements;
 
-	if (N > SIZE_MAX / sizeof(*p))
-		die("N = %u > %zu", N, SIZE_MAX / sizeof(*p));
-	p = xmalloc(N * sizeof(*p));
-	p1 = xmalloc(N * sizeof(*p1));
+	if (N > SIZE_MAX / sizeof(long double))
+		die("N = %u > %zu", N, SIZE_MAX / sizeof(long double));
+	p = xmalloc(N * sizeof(long double));
+	p1 = xmalloc(N * sizeof(long double));
 
 	for (i = 0; i < N; i++)
 		if (p_x0_data[i] < 0.0)

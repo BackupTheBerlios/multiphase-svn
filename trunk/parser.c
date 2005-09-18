@@ -55,7 +55,7 @@ struct token * tokenize(void)
 		if (!isspace(c)) {
 			struct token *token;
 
-			token = xmalloc(sizeof(*token));
+			token = xmalloc(sizeof(struct token));
 			c = get_token(c, &token->string);
 			last_token->next = token;
 			last_token = last_token->next;
