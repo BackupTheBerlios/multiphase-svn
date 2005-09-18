@@ -1,0 +1,57 @@
+Multiphase flow simulator
+=========================
+
+http://multiphase.berlios.de/
+ftp://ftp.berlios.de/pub/multiphase/
+
+Compiling
+---------
+
+Simply type
+
+	make
+
+Provided you have C99 compliant compiler, "1phase" executable should be built.
+
+1-phase flow simulator
+----------------------
+
+Usage:
+	1phase <input
+
+Input file format
+-----------------
+
+DX	FLOAT			distance between adjacent grid points
+DT	FLOAT			length of a timestep
+NT	INTEGER			number of timesteps
+K	FLOAT			permeability
+phi	FLOAT			porosity
+mu	FLOAT			viscosity
+c	FLOAT			compressibility
+p_x0	FLOAT FLOAT ...		Initial pressure. Number of grid points will be
+				equal to the length of this array.
+p_lt	FLOAT FLOAT ...		Left boundary condition. First number is
+				boundary condition at timestep 0, second one --
+				at timestep 1, ... The last number remains
+				boundary condition up to the last timestep.
+p_rt	FLOAT FLOAT ...		right boundary condition
+
+Sample input file
+-----------------
+
+DX	25.0
+DT	5.0
+K	47.1
+NT	9
+phi	0.17
+mu	4.7
+c	1.7
+p_x0	100.0 100.0 100.0 100.0 100.0 100.0 100.0
+p_lt	100.0 0.0
+p_rt	100.0
+
+Reporting bugs
+--------------
+
+Please, report bugs to Alexey Dobriyan <adobriyan@gmail.com>

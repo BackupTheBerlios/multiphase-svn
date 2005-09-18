@@ -1,0 +1,181 @@
+% Documentation for 1-phase flow simulator.
+% Copyright (C) 2005 Alexey Dobriyan <adobriyan@gmail.com>
+%
+% This information is free; you can redistribute it and/or modify
+% it under the terms of version 2 of the GNU General Public License as
+% published by the Free Software Foundation.
+%
+% This work is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this work; if not, write to the Free Software
+% Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+\documentclass{article}
+\begin{document}
+\title{1-phase flow}
+\author{Alexey Dobriyan $<$adobriyan@gmail.com$>$}
+\maketitle
+
+\section{Differential equations}
+
+Continuity equation:
+\begin{equation}
+\frac{\partial (\phi \rho)}{\partial t} + \nabla (\rho \vec{v}) = q
+\end{equation}
+where $\phi = \phi(\vec{r}, p)$ --- porosity of the medium, $\rho = \rho(p)$
+--- density of the fluid, $t$~--- time, $\vec{v} = \vec{v}(\vec{r}, t)$ ---
+flow velocity, $q = q(\vec{r}, t)$ --- fluid injection rate.
+
+Darcy's law:
+\begin{equation}
+\vec{v} = -\frac{K}{\mu} (\nabla p - \rho g \nabla D)
+\end{equation}
+$K = K(\vec{r}, p)$ --- permeability, $\mu = \mu(p)$ --- viscosity, $p =
+p(\vec{r}, t)$ --- pressure in the fluid, $g$ --- acceleration due to gravity,
+$D = D(\vec{r})$ --- depth function.
+\begin{equation}
+\frac{\partial (\phi \rho)}{\partial t} = \nabla \left(\frac{\rho K}{\mu}
+(\nabla p - \rho g \nabla D) \right) + q
+\end{equation}
+
+\section{Assumptions}
+\begin{enumerate}
+\item $D$ = const
+\begin{equation}
+\frac{\partial (\phi \rho)}{\partial t} = \nabla \left(\frac{\rho K}{\mu}
+\nabla p \right) + q
+\end{equation}
+\item $\phi$ = const
+\begin{equation}
+\phi \frac{\partial \rho}{\partial t} = \nabla \left(\frac{\rho K}{\mu}
+\nabla p \right) + q
+\end{equation}
+\item $K$ = const
+\begin{equation}
+\phi \frac{\partial \rho}{\partial t} = K \nabla \left(\frac{\rho}{\mu} \nabla
+p \right) + q
+\end{equation}
+\item $\mu$ = const
+\begin{equation}
+\phi \frac{\partial \rho}{\partial t} = \frac{K}{\mu} \nabla (\rho \nabla p) +
+q
+\end{equation}
+
+\begin{equation}
+\frac{\partial \rho}{\partial t} = \rho' \frac{\partial p}{\partial t}
+\end{equation}
+\begin{equation}
+\nabla (\rho \nabla p) = \nabla \rho \nabla p + \rho \Delta p = \rho' (\nabla
+p)^2 + \rho \Delta p
+\end{equation}
+\begin{equation}
+\phi \rho' \frac{\partial p}{\partial t} = \frac{K}{\mu} \left(\rho' (\nabla
+p)^2 + \rho \Delta p \right) + q
+\end{equation}
+\begin{equation}
+\phi \frac{\rho'}{\rho} \frac{\partial p}{\partial t} = \frac{K}{\mu}
+\left(\frac{\rho'}{\rho} (\nabla p)^2 + \Delta p \right) + \frac{q}{\rho}
+\end{equation}
+\item $\frac{\rho'}{\rho}$ = $c$ = const
+\begin{equation}
+\phi c \frac{\partial p}{\partial t} = \frac{K}{\mu} \left(c (\nabla p)^2 +
+\Delta p \right) + \frac{q}{\rho}
+\end{equation}
+\item $c (\nabla p)^2 \ll \Delta p$ --- fluid of slight compressibility
+\begin{equation}
+\phi c \frac{\partial p}{\partial t} = \frac{K}{\mu} \Delta p + \frac{q}{\rho}
+\end{equation}
+\item $q$ = 0
+\begin{equation}
+\frac{\partial p}{\partial t} = \frac{K}{\phi \mu c} \Delta p
+\end{equation}
+\item 1-dimensional space
+\begin{equation}
+\frac{\partial p}{\partial t} = \frac{K}{\phi \mu c} \frac{\partial^2
+p}{\partial x^2}
+\end{equation}
+where $p = p(x, t)$.
+\end{enumerate}
+
+\section{Initial and boundary conditions}
+\begin{equation}
+p(x, 0) = p_{x 0}(x), 0 \leq x \leq L
+\end{equation}
+\begin{equation}
+p(0, t) = p_{l t}(t), t \geq 0
+\end{equation}
+\begin{equation}
+p(L, t) = p_{r t}(t), t \geq 0
+\end{equation}
+
+\section{Finite Difference Scheme}
+
+Let's use the simplest explicit finite difference scheme on uniform grid for
+now. $\Delta x$, $\Delta t$ are constants. Second deriative in space is
+evaluated from values of 3 neighbor points.
+\begin{equation}
+p_{i j} = p(i \Delta x, j \Delta t), 0 \leq i \leq N - 1, j \geq 0
+\end{equation}
+\begin{equation}
+p_{i 0} = p_{x 0}(i \Delta x), 0 \leq i \leq N - 1
+\end{equation}
+\begin{equation}
+p_{0 j} = p_{l t}(j \Delta t), j \geq 0
+\end{equation}
+\begin{equation}
+p_{N - 1, j} = p_{r t}(j \Delta t), j \geq 0
+\end{equation}
+\begin{equation}
+\frac{p_{i, j + 1} - p_{i j}}{\Delta t} = \frac{K}{\phi \mu c} \frac{p_{i - 1,
+j} - 2 p_{i j} + p_{i + 1, j}}{(\Delta x)^2}, 1 \leq i \leq N - 2, j \geq 1
+\end{equation}
+
+\section{Numerical Stability}
+
+\begin{equation}
+\frac{\partial p}{\partial t} = a^2 \frac{\partial^2 p}{\partial x^2}
+\end{equation}
+\begin{equation}
+\frac{p_{m, n + 1} - p_{m n}}{\Delta t} = a^2 \frac{p_{m - 1, n} - 2 p_{m n} +
+p_{m + 1, n}}{(\Delta x)^2}
+\end{equation}
+\begin{equation}
+p_{m n} = \gamma^n e^{i p m \Delta x}
+\end{equation}
+\begin{equation}
+\frac{\gamma^{n + 1} e^{i p m \Delta x} - \gamma^n e^{i p m \Delta x}}{\Delta
+t} = a^2 \frac{\gamma^n e^{i p (m - 1) \Delta x} - 2 \gamma^n e^{i p m \Delta
+x} + \gamma^n e^{i p (m + 1) \Delta x}}{(\Delta x)^2}
+\end{equation}
+$\frac{\gamma - 1}{\Delta t} = a^2 \frac{e^{-i p \Delta x} - 2 + e^{i p \Delta
+x}}{(\Delta x)^2} = 2 a^2 \frac{cos(p \Delta x) - 1}{(\Delta x)^2} = -4 a^2
+\frac{\sin^2 \frac{p \Delta x}{2}}{(\Delta x)^2}$
+\begin{equation}
+\gamma = 1 - 4 a^2 \frac{\Delta t}{(\Delta x)^2} \sin^2 \frac{p \Delta x}{2}
+\end{equation}
+
+For a finite difference scheme to be numerically stable, $|\gamma|$ must be
+less or equal to 1.
+\begin{equation}
+-1 \leq 1 - 4 a^2 \frac{\Delta t}{(\Delta x)^2} \sin^2 \frac{p \Delta x}{2}
+\leq 1
+\end{equation}
+\begin{equation}
+\frac{\Delta t}{(\Delta x)^2} \leq \frac{1}{2 a^2 \sin^2 \frac{p \Delta x}{2}}
+\end{equation}
+or even
+\begin{equation}
+\frac{\Delta t}{(\Delta x)^2} \leq \frac{1}{2 a^2}
+\end{equation}
+
+In the simplest case:
+\begin{equation}
+a^2 = \frac{K}{\phi \mu c}
+\end{equation}
+
+\input{gpl_notice.tex}
+\end{document}
